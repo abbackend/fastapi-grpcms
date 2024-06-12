@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package address;
+
+message AddRequest {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  int32 zip = 4;
+}
+
+message AddResponse {
+  string message = 1;
+}
+
+message AddressModal {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  int32 zip = 4;
+  bool is_default = 5;
+}
+
+message GetRequest {}
+
+message GetResponse {
+  repeated AddressModal addresses = 1;
+}
+
+service Address {
+  rpc Add(AddRequest) returns (AddResponse) {}
+  rpc Get(GetRequest) returns (GetResponse) {}
+}

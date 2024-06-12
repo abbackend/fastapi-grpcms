@@ -1,0 +1,85 @@
+version: "3.8"
+
+services:
+  fastapi_service:
+    build:
+      context: ./gateway-ms
+      dockerfile: Dockerfile
+    container_name: fastapi_gateway
+    ports:
+      - "8000:80"
+    volumes:
+      - ./gateway-ms:/app
+    networks:
+      - my-net
+    depends_on:
+      - user
+      - address
+
+  user:
+    build:
+      context: ./user-ms
+      dockerfile: Dockerfile
+    container_name: fastapi_user
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./user-ms:/app
+    networks:
+      - my-net
+    depends_on:
+      - db
+
+  address:
+    build:
+      context: ./address-ms
+      dockerfile: Dockerfile
+    container_name: fastapi_address
+    ports:
+      - "50052:50052"
+    volumes:
+      - ./address-ms:/app
+    networks:
+      - my-net
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: fastapi_db
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: "app"
+      MYSQL_ROOT_PASSWORD: "root"
+      SERICE_TAGS: "local"
+      SERIVE_NAME: "mysql"
+    networks:
+      - my-net
+    volumes:
+      - dbdata:/var/lib/mysql/
+    command: --explicit_defaults_for_timestamp=1
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: fastapi_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - 8001:80
+    networks:
+      - my-net
+    depends_on:
+      - db
+
+networks:
+  my-net:
+    external: true
+
+volumes:
+  dbdata:
+    driver: local

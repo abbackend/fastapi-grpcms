@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package user;
+
+message AddressModal {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  int32 zip = 4;
+  bool is_default = 5;
+}
+
+message UserRequest {}
+
+message UserResponse {
+  int32 user_id = 1;
+  string email = 2;
+  bool is_active = 3;
+  repeated AddressModal addresses = 4;
+}
+
+service User {
+  rpc ActiveUser(UserRequest) returns (UserResponse) {}
+}
