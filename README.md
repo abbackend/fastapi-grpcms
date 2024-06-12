@@ -69,7 +69,7 @@ This is a full solustion of implement the fast api project with multiple micro-s
 Clone the project
 
 ```bash
-  git clone [https://link-to-project](https://github.com/abbackend/fastapi-grpcms.git)
+  git clone https://github.com/abbackend/fastapi-grpcms.git
 ```
 
 Go to the project directory
